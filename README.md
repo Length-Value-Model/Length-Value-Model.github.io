@@ -1,11 +1,18 @@
-# MMWorld-bench.github.io
+# Length-Value-Model.github.io
 
+Project homepage for:
 
-This is the repository that contains source code for the [Soft Thinking website](Soft-Thinking.github.io).
+`Length Value Model: Scalable Value Pretraining for Token-Level Length Modeling`
 
-If you find Soft Thinking useful for your work please cite:
-```
-```
+This site presents the paper overview, method, experimental results, analysis, and an embedded PDF preview.
 
-# Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+## Local structure
+
+- `index.htm`: single-page project homepage
+- `static/css/index.css`: page styling
+- `static/assets/figures/`: paper figures converted for web display
+- `static/assets/pdfs/paper.pdf`: local copy of the paper PDF
+
+## License
+
+Please follow the paper and repository licensing terms for redistribution of assets and text.

@@ -1,908 +1,405 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="Soft Thinking: Unlocking the Reasoning Potential of LLMs in Continuous Concept Space">
-  <meta name="keywords" content="Soft Thinking, CoT">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Soft Thinking: Unlocking the Reasoning Potential of LLMs in Continuous Concept Space</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <meta name="description" content="Length Value Model: Scalable Value Pretraining for Token-Level Length Modeling. A UCSB and Apple collaborative project on token-level length control, prediction, and interpretation.">
+  <meta name="keywords" content="Length Value Model, LenVM, token-level length modeling, value pretraining, LLM, VLM">
+  <meta property="og:title" content="Length Value Model">
+  <meta property="og:description" content="Scalable value pretraining for token-level length modeling.">
+  <meta property="og:url" content="https://length-value-model.github.io/">
+  <link rel="canonical" href="https://length-value-model.github.io/">
+  <title>Length Value Model</title>
   <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
   </script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-  rel="stylesheet">
-
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="icon" href="./static/images/icon.png">
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-  <!-- <script src="https://assets.crowd.aws/crowd-html-elements.js"></script> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
-
-
-
-
-  <style>
-    /* .section {
-      padding: 3rem 1.5rem;
-    }
-
-    .container {
-      max-width: 800px;
-    }
-
-    #video-container {
-      margin-bottom: 2rem;
-    }
-
-    #question-container {
-      margin-bottom: 2rem;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .button.is-primary {
-      background-color: #3273dc;
-      border-color: transparent;
-      color: #fff;
-      transition: background-color 0.3s ease;
-    }
-
-    .button.is-primary:hover {
-      background-color: #275ab0;
-      border-color: transparent;
-    }
-
-    .title img {
-      margin-right: 0.5rem;
-    }
-
-    .select {
-      width: 100%;
-      margin-top: 1rem;
-    } */
-
-    /* Hide the "Previewing Answers Submitted by Workers" message */
-    crowd-alert {
-      display: none !important;
-    }
-  </style>
 </head>
 <body>
+  <div class="analytics-hidden" aria-hidden="true">
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=aWXOLmFIGQWsyqDz9oyKoEBQIJsF7KoJWVoQwqpHvrY&cl=ffffff&w=a"></script>
+  </div>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#top">Length Value Model</a>
+      <nav class="topnav">
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#paper">Paper</a>
+      </nav>
+    </header>
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <div style="display: flex; align-items: center; justify-content: center;">
-            <!-- <img src="./static/image/worldevallogo.png" style="width:6em;vertical-align: middle" alt="Logo"/>  -->
-            <h1 class="title is-1 publication-title" style="display: inline-block;">Soft Thinking: Unlocking the Reasoning Potential of LLMs in Continuous Concept Space</h1>
+    <main id="top">
+      <section class="hero">
+        <div class="hero-head reveal">
+          <p class="eyebrow">UCSB + Apple collaborative research</p>
+          <h1>Length Value Model</h1>
+          <p class="hero-kicker">LenVM</p>
+        </div>
+
+        <div class="hero-body-grid">
+        <div class="hero-copy reveal">
+          <p class="hero-subtitle">
+            Scalable value pretraining for token-level length modeling.
+          </p>
+          <p class="hero-summary">
+            Length Value Model, or LenVM, treats remaining generation length as a value estimation problem. It predicts a bounded token-level signal during decoding, enabling precise length control, smooth performance-efficiency trade-offs, prompt-boundary length prediction, and interpretable generation dynamics.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">PDF</span><span>Read Paper</span></a>
+            <a class="button" href="https://github.com/eric-ai-lab/Length-Value-Model"><span class="button-icon">&lt;/&gt;</span><span>Code</span></a>
+            <a class="button" href="#paper"><span class="button-icon">{ }</span><span>BibTeX</span></a>
           </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://namezhenzhang.github.io/">Zhen Zhang</a><sup>1</sup><sup>,*,†</sup>,</span>
-            <span class="author-block">
-              <a href="https://sheehan1230.github.io/">Xuehai He</a><sup>2</sup><sup>,*</sup>,</span>
-            <span class="author-block">
-              <a href="https://weixiangyan.github.io/">Weixiang Yan</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://aoshen524.github.io/">Ao Shen</a><sup>4</sup>,</span>
-            <span class="author-block">
-              <a href="https://zhaochenyang20.github.io/Chayenne/">Chenyang Zhao</a><sup>3,5</sup>,</span>
-            <span class="author-block">
-              <a href="https://sites.google.com/site/shuohangsite/">Shuohang Wang</a><sup>6</sup>,</span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=S6OFEFEAAAAJ&hl=en">Yelong Shen</a><sup>6</sup>,</span>
-            <span class="author-block">
-              <a href="https://eric-xw.github.io/">Xin Eric Wang</a><sup>1,2,†</sup>,</span>
-            <!-- <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en">Jianfeng Wang</a><sup style="color: #90EE90;">3</sup>,</span>
-            <span class="author-block">
-              <a href="https://www.linkedin.com/in/linjie-li/">Linjie Li</a><sup style="color: #90EE90;">3</sup>,</span>
-            <span class="author-block">
-              <a href="https://zyang-ur.github.io/">Zhengyuan Yang</a><sup style="color: #90EE90;">3</sup>,</span>
-            <span class="author-block">
-              <a href="https://sites.google.com/site/kevinlin311tw/me">Kevin Lin</a><sup style="color: #90EE90;">3</sup>,</span>
-            <span class="author-block">
-              <a href="https://sites.cs.ucsb.edu/~william/">William Yang Wang</a><sup style="color: #ADD8E6;">2</sup>,</span>
-            <span class="author-block">
-              <a href="https://www.microsoft.com/en-us/research/people/lijuanw/">Lijuan Wang</a><sup style="color: #90EE90;">3</sup>,</span>
-            <span class="author-block">
-              <a href="https://eric-xw.github.io/">Xin Eric Wang</a><sup style="color: #FFB6C1;">†,1</sup>,</span> -->
+          <div class="meta-strip">
+            <span>Annotation-free supervision</span>
+            <span>Dense token-level targets</span>
+            <span>LLMs and VLMs</span>
           </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of California, Santa Barbara,</span>
-            <span class="author-block"><sup>2</sup>University of California, Santa Cruz,</span>
-            <span class="author-block"><sup>3</sup>University of California, Los Angeles,</span>
-            <span class="author-block"><sup>4</sup>Purdue University,</span>
-            <span class="author-block"><sup>5</sup>LMSYS Org,</span>
-            <span class="author-block"><sup>6</sup>Microsoft,</span>
-          </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><span class="equal-contribution">* Equal Contribution</span></span>
-          </div>
-          <!-- <br>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><b style="color:#e08ba0; font-weight:normal"> <b>Under Review</b> </b></span>
-          </div> -->
-          <br>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">†Corresponding to:</span>
-            <span class="author-block"><a href="mailto:zhen_zhang@ucsb.edu">zhen_zhang@ucsb.edu</a>,</span>
-            <span class="author-block"><a href="mailto:ericxwang@ucsb.edu">ericxwang@ucsb.edu</a></span>
-          </div>
+        </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2505.15778"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <!-- <span class="link-block">
-                <a href="https://huggingface.co/datasets/Xuehai/MMWorld"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-database"></i>
-                  </span>
-                  <span>dataset</span>
-                </a>
-              </span> -->
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/eric-ai-lab/Soft-Thinking"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Arxiv Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2505.15778"
-                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-alt"></i>
-                  </span>
-                  <span>arxiv</span>
-                  </a>
-              </span>
-<!-- 
-              <span class="link-block">
-                <a href="#leaderboard"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon has-text-white">
-                    <i class="fa-solid fa-trophy"></i>
-
-                  </span>
-                  <span>Leaderboard</span>
-                </a>
-              </span> -->
-
-
-
-             <!-- <span class="link-block">
-    <a href="https://huggingface.co/spaces/Xuehai/MMWorld" 
-       class="external-link button is-normal is-rounded is-dark">
-      <span class="icon">
-        <img src="https://huggingface.co/front/assets/huggingface_logo.svg" 
-             alt="Hugging Face" 
-             style="height: 1em; vertical-align: middle;">
-      </span>
-      <span>Hugging Face Leaderboard</span>
-    </a>
-</span> -->
-
-              
-              <!-- Visualization Link. -->
-              <!-- <span class="link-block">
-                <a href="https://eval.ai/web/challenges/challenge-page/2359/overview"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon has-text-white">
-                      <i class="fa-solid fa-medal"></i>
-                  </span>
-                  <span>EvalAI</span>
-                </a>
-              </span> -->
-              <!-- EvalAI Link. -->
-              <!-- <span class="link-block">
-                <a href="#examples"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon has-text-white">
-                    <i class="fa-solid fa-book"></i>
-                  </span>
-                  <span>Examples</span>
-                </a>
-              </span> -->
-
-
+        <div class="hero-visual reveal">
+          <div class="hero-figure card">
+            <img src="./static/assets/figures/lenvm.png" alt="LenVM architecture and training pipeline">
+            <div class="figure-intro">
+              <p class="figure-label">Architecture</p>
+              <p>
+                At each decoding step, LenVM attaches a scalar head to the final hidden state and predicts a value in \( (-1, 0) \), giving a token-level estimate of the remaining generation horizon.
+              </p>
             </div>
-
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <img id="teaser" width="150%" src="./static/image/teaser5/teaser5-1.png">
-      <h2 class="subtitle has-text-centered">
-        <p style="font-family:Times New Roman"><b>Soft Thinking vs. Chain-of-Thought thinking on mathematical and coding datasets. Soft Thinking consistently improves both accuracy (with improvements of up to 2.48% on pass@1 accuracy) and generation efficiency (achieving up to 22.4% reduction in generation length) across both tasks, without any training.</b></p>
-      </h2>
-    </div>
-  </div>
-</section>
+      <section class="authors section section-tight reveal">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Authors</p>
+          <h2>Research team and affiliations</h2>
+        </div>
+        <div class="authors-card card">
+          <div class="authors-list">
+            <span class="author-pill"><strong>Zhen Zhang</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Changyi Yang</strong><em>Carnegie Mellon + LMSYS</em></span>
+            <span class="author-pill"><strong>Zijie Xia</strong><em>LMSYS</em></span>
+            <span class="author-pill"><strong>Zhen Yang</strong><em>Apple</em></span>
+            <span class="author-pill"><strong>Chengzhi Liu</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Zhaotiao Weng</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Yepeng Liu</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Haobo Chen</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Jin Pan</strong><em>Wisconsin + LMSYS</em></span>
+            <span class="author-pill"><strong>Chenyang Zhao</strong><em>LMSYS</em></span>
+            <span class="author-pill"><strong>Yuheng Bu</strong><em>UC Santa Barbara</em></span>
+            <span class="author-pill"><strong>Alkesh Patel</strong><em>Apple</em></span>
+            <span class="author-pill"><strong>Zhe Gan</strong><em>Apple</em></span>
+            <span class="author-pill"><strong>Xin Eric Wang</strong><em>UC Santa Barbara</em></span>
+          </div>
+          <div class="affiliation-strip">
+            <span>UC Santa Barbara</span>
+            <span>Carnegie Mellon University</span>
+            <span>University of Wisconsin-Madison</span>
+            <span>LMSYS Org</span>
+            <span>Apple</span>
+          </div>
+        </div>
+      </section>
 
+      <section class="section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Core Idea</p>
+          <h2>Length is not just an output statistic. It is a token-level computational state.</h2>
+        </div>
+        <div class="grid three-col">
+          <article class="card feature-card">
+            <h3>Model Remaining Horizon</h3>
+            <p>
+              Instead of reasoning about whole-sequence length only after decoding, LenVM predicts the remaining generation horizon at every token.
+            </p>
+          </article>
+          <article class="card feature-card">
+            <h3>Formulate It as Value</h3>
+            <p>
+              By assigning a constant per-token cost, remaining length becomes a bounded discounted return:
+              \( G_t = -(1 - \gamma^{L-t}) \).
+            </p>
+          </article>
+          <article class="card feature-card">
+            <h3>Use It at Inference</h3>
+            <p>
+              The resulting signal can steer decoding toward shorter or longer continuations, predict response budgets early, and expose interpretable horizon shifts.
+            </p>
+          </article>
+        </div>
+      </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">
-        <!-- <img width="5%" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="vertical-align: middle; margin-right: 10px;"> -->
-        <img width="5%" src="https://cdn-icons-png.flaticon.com/512/2919/2919717.png" alt="Abstract Icon" style="vertical-align: middle; margin-right: 10px;">
-          Abstract
-        </h2>
-        <!-- <h2 class="title is-3">Abstract</h2> -->
-        <div class="content has-text-justified">
+      <section id="method" class="section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Method</p>
+          <h2>A small scalar head turns generation length into a controllable value signal.</h2>
+        </div>
+        <div class="method-layout">
+          <div class="card method-card">
+            <h3>How LenVM works</h3>
+            <ul class="detail-list">
+              <li>Attach a scalar value head to the final-layer hidden state at each decoding step.</li>
+              <li>Train against exact Monte Carlo targets computed from sampled completions.</li>
+              <li>Keep the target bounded in \( (-1, 0) \) for stable regression over very long horizons.</li>
+              <li>Scale supervision through more prompts, more completions per prompt, and larger backbone models.</li>
+            </ul>
+          </div>
+          <div class="card method-card">
+            <h3>What the signal enables</h3>
+            <ul class="detail-list">
+              <li>Hard constraints such as equal-to, at-most, and at-least generation length.</li>
+              <li>Continuous trade-off control through value-guided exponential tilting.</li>
+              <li>Prompt-boundary estimates for scheduling, batching, and memory planning.</li>
+              <li>Token-level interpretation of when reasoning shifts toward longer or shorter continuations.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Results</p>
+          <h2>The page does not hinge on one number. The picture is broader.</h2>
           <p>
-            Human cognition typically involves thinking through abstract, fluid concepts rather than strictly using discrete linguistic tokens. Current Large Language Models (LLMs), however, are constrained to reasoning within the boundaries of human language, processing discrete token embeddings that represent fixed points in semantic space. This discrete constraint restricts the expressive power and upper potential of such reasoning models, often causing incomplete exploration of reasoning paths, as standard Chain-of-Thought (CoT) methods rely on sampling one token per step. In this work, we introduce Soft Thinking, a training-free method that emulates human-like "soft" reasoning by generating soft, abstract concept tokens in a continuous concept space. These concept tokens are created by the probability-weighted mixture of token embeddings, which form the continuous concept space, enabling smooth transitions and richer representations that transcend traditional discrete boundaries. In essence, each generated concept token encapsulates multiple meanings from related discrete tokens, implicitly exploring various reasoning paths to converge effectively toward the correct answer. Empirical evaluations on diverse mathematical and coding benchmarks consistently demonstrate the effectiveness and efficiency of Soft Thinking, improving pass@1 accuracy by up to 2.48 points while simultaneously reducing token usage by up to 22.4% compared to standard CoT. Qualitative analysis further reveals that Soft Thinking outputs remain highly interpretable and readable, highlighting the potential of Soft Thinking to break the inherent bottleneck of discrete language-based reasoning.
+            LenVM consistently improves exact length matching, exposes a better performance-efficiency frontier, predicts generation horizon from the prompt boundary, and scales cleanly as supervision grows.
           </p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-five-fifths">
-        <h2 class="title is-3">
-          <img width="5%" src="https://cdn-icons-png.flaticon.com/512/2922/2922821.png" alt="Pipeline Icon" style="vertical-align: middle; margin-right: 10px;">
-          Soft Thinking Pipeline
-        </h2> 
-        <!-- <h2 class="title is-3"><img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png"> Soft Thinking Pipeline </h2>  -->
-      </div>
-    </div>
-
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-six-fifths">  
-            <img id="model" width="50%" src="./static/image/softthinking/softthinking-1.png">
-            <h3 class="subtitle has-text-centered">
-              <p style="font-family:Times New Roman"><b>Soft Thinking replaces discrete tokens with abstract concept tokens, enabling reasoning in continuous concept space. </b></p>
-            </h3>   
-        </div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-five-fifths">
-        <h2 class="title is-3">
-          <img width="5%" src="https://cdn-icons-png.flaticon.com/512/2919/2919706.png" alt="Example Icon" style="vertical-align: middle; margin-right: 10px;">
-          An example of Soft Thinking and CoT
-        </h2> 
-        <!-- <h2 class="title is-3"><img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png"> An example of Soft Thinking and CoT</h2>  -->
-      </div>
-    </div>
-
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-six-fifths">  
-            <img id="model" width="100%" src="./static/image/softthinking_example/softthinking_example-1.png">
-            <h3 class="subtitle has-text-centered">
-              <p style="font-family:Times New Roman"><b>A comparison between standard CoT and Soft Thinking on a multiplication problem. We select the token with the highest probability at each step of Soft Thinking for readability and interpretability. Full distribution is visualized in heatmap. Red text denotes repetitive, useless words.</b></p>
-            </h3>   
-        </div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-five-fifths">
-        <h2 class="title is-3">
-          <img width="5%" src="https://cdn-icons-png.flaticon.com/512/2919/2919596.png" alt="Distribution Icon" style="vertical-align: middle; margin-right: 10px;">
-          Probability Distribution of Soft Thinking at Each Step
-        </h2> 
-        <!-- <h2 class="title is-3"><img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png"> Probability Distribution of Soft Thinking at Each Step </h2>  -->
-      </div>
-    </div>
-
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-six-fifths">     
-            <img id="model" width="100%" src="./static/image/softthinking_heatmap/softthinking_heatmap-1.png">
-            <h3 class="subtitle has-text-centered">
-              <p style="font-family:Times New Roman"><b>An example illustrating the probability distribution of our proposed Soft Thinking method. At each step, top-k token candidates and their probabilities are shown.  Red boxes indicate the selected tokens that form the final generated sequence for readability and interpretability.</b></p>
-            </h3>   
-
-
-        </div>
-  </div>
-</section>
-
-
-
-
-
-<!-- 
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-five-fifths">
-        <h2 class="title is-3"><img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png"> Study on MLLM Performance at Different Difficulty Levels for Average Humans</h2> 
-      </div>
-    </div>
-
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-half">  
-        <img id="model" width="100%" src="./static/image/difficulty_level.png">
-      </div>
-      <div class="column is-half">  
-        <img id="model" width="100%" src="./static/image/difficulty_level_by_discipline.png">
-      </div>
-    </div>
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full">
-        <h3 class="subtitle has-text-centered">
-          <p style="font-family:Times New Roman"><b>Figure 5. Model performance at different difficulty levels for average humans. Average human
-            difficulty levels are defined by 3 turkers' performance per question: Easy (3/3 correct answers),
-            medium (2/3 correct), hard (1/3 correct), and expert (0/3 correct).</b></p>
-        </h3>   
-      </div>
-    </div>
-  </div>
-</section> -->
-
-
-
-
-<!-- <section class="section" id="examples">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-five-fifths">
-        <h2 class="title is-3"><img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png"> Examples</h2>
-      </div>
-    </div>
-
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-six-fifths">
-        <div id="video-container">
-          <video id="example-video" width="100%" height="315" controls>
-            <source id="video-source" src="" type="video/mp4">
-          </video>
+        <div class="grid three-col">
+          <article class="card stat-card">
+            <span class="stat-label">Length Control</span>
+            <h3>Open models become far more precise on exact target lengths.</h3>
+            <p>On LIFEBench Equal To, LenVM lifts Qwen2.5-7B-Instruct from 30.9 to 64.8 length score.</p>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Trade-Off</span>
+            <h3>Shorter successful trajectories can be uncovered without changing the base model.</h3>
+            <p>On GSM8K around 200 tokens, LenVM keeps about 63% Pass@1 while the hard budget baseline is about 6%.</p>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Prediction</span>
+            <h3>Prompt-boundary length estimation becomes accurate enough to be operationally useful.</h3>
+            <p>At 32B, mean relative error falls to 9.8% on math, 14.9% on code, and 17.1% on instruction following.</p>
+          </article>
         </div>
 
-        <div id="question-container">
-          <p id="question"></p>
-          <select id="options" required=""></select>
-        </div>
-
-        <div class="buttons">
-          <button id="prev-button" class="button is-primary">Previous</button>
-          <button id="next-button" class="button is-primary">Next</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
-
-<!-- 
-
-<section class="section" id="examples">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full">
-        <h2 class="title is-3">
-          <img id="painting_icon" width="5%" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png" alt="Painting Icon">
-          Examples
-        </h2>
-      </div>
-    </div>
-
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full">
-        <div id="video-container" class="box">
-          <video id="example-video" class="is-fullwidth" controls>
-            <source id="video-source" src="" type="video/mp4">
-          </video>
-
-          <p class="has-text-weight-bold" style="color: #4682b4;">Discipline: <span id="discipline" style="color: #4682b4;"></span></p>
-          <p class="has-text-weight-bold" style="color: #ff69b4;">Subdiscipline: <span id="subdiscipline" style="color: #ff69b4;"></span></p>
-          <p class="has-text-weight-bold" style="color: #66cdaa;">Question: <span id="question" style="color: #66cdaa;"></span></p>
-          <div class="select is-fullwidth" style="margin-top: 1rem;">
-            <select name="video-question-answer" id="options" required="">
-            </select>
+        <div class="card table-card">
+          <div class="table-header">
+            <div>
+              <p class="eyebrow">Training Mixture</p>
+              <h3>Datasets used to train general LenVMs</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th>Dataset</th>
+                  <th>Scale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Code</td>
+                  <td>OpenCodeReasoning-2 (Python)</td>
+                  <td>1.42M</td>
+                </tr>
+                <tr>
+                  <td>Instruction Following</td>
+                  <td>WildChat</td>
+                  <td>529k</td>
+                </tr>
+                <tr>
+                  <td>Math</td>
+                  <td>DeepMath-103K</td>
+                  <td>103k</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        
-
-        <div class="buttons is-centered">
-          <button id="prev-button" class="button is-primary is-light">Previous</button>
-          <button id="next-button" class="button is-primary is-light">Next</button>
+        <div class="card table-card">
+          <div class="table-header">
+            <div>
+              <p class="eyebrow">LIFEBench</p>
+              <h3>Length-controlled generation under Equal To, At Most, and At Least constraints</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="dense-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Equal To Deviation (Lower Better)</th>
+                  <th>Equal To Score (Higher Better)</th>
+                  <th>At Most Score (Higher Better)</th>
+                  <th>At Least Score (Higher Better)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="group-row">
+                  <td colspan="5">Closed-source frontier models</td>
+                </tr>
+                <tr><td>GPT-4o</td><td>74%</td><td>35.5</td><td>77.9</td><td>98.5</td></tr>
+                <tr><td>GPT-5.4</td><td>135%</td><td>37.4</td><td>65.4</td><td>98.9</td></tr>
+                <tr><td>GPT-5.4-thinking</td><td>131%</td><td>47.8</td><td>72.7</td><td>98.9</td></tr>
+                <tr><td>Claude-Sonnet-4-6</td><td>105%</td><td>34.1</td><td>62.9</td><td>100.0</td></tr>
+                <tr><td>Claude-Sonnet-4-6-thinking</td><td>124%</td><td>51.3</td><td>69.3</td><td>100.0</td></tr>
+                <tr><td>Claude-Opus-4-6</td><td>66%</td><td>35.5</td><td>51.5</td><td>100.0</td></tr>
+                <tr><td>Claude-Opus-4-6-thinking</td><td>87%</td><td>53.2</td><td>67.4</td><td>100.0</td></tr>
+                <tr><td>Gemini-3-Flash-Preview</td><td>123%</td><td>40.3</td><td>57.3</td><td>99.6</td></tr>
+                <tr><td>Gemini-3.1-Pro-Preview</td><td>91%</td><td>49.3</td><td>70.7</td><td>100.0</td></tr>
+                <tr class="group-row">
+                  <td colspan="5">Open models with LenVM guidance</td>
+                </tr>
+                <tr><td>Qwen2.5-3B-Instruct</td><td>83%</td><td>25.6</td><td>92.1</td><td>94.6</td></tr>
+                <tr class="highlight-row"><td>+ LenVM (1.5B)</td><td>56%</td><td>62.6</td><td>93.0</td><td>93.1</td></tr>
+                <tr><td>Qwen2.5-7B-Instruct</td><td>71%</td><td>30.9</td><td>98.5</td><td>89.1</td></tr>
+                <tr class="highlight-row"><td>+ LenVM (1.5B)</td><td>44%</td><td>64.8</td><td>96.1</td><td>99.5</td></tr>
+                <tr><td>Qwen3-30B-A3B-Instruct</td><td>90%</td><td>36.8</td><td>87.0</td><td>99.3</td></tr>
+                <tr class="highlight-row"><td>+ LenVM (1.7B)</td><td>57%</td><td>67.2</td><td>99.4</td><td>99.8</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section> -->
 
-
-<div class="section" id="math-table">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full">
-        <h2 class="title is-3">
-          <img width="5%" src="https://cdn-icons-png.flaticon.com/512/1065/1065646.png" alt="Math Icon" style="vertical-align: middle; margin-right: 10px;">
-          Accuracy and Generation Length on Mathematical Datasets
-        </h2>
-        <!-- <h2 class="title is-3">
-          <img width="5%" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Table Icon" style="vertical-align: middle;">
-          Accuracy and Generation Length on Mathematical Datasets
-        </h2> -->
-        <div class="table-container" style="overflow-x:auto;">
-          <table class="table is-bordered is-striped is-hoverable is-fullwidth" style="font-size: 0.95em;">
-            <thead>
-              <tr>
-                <th rowspan="2"></th>
-                <th colspan="5" style="border-right:2px solid #ccc"><strong>Accuracy &uarr;</strong></th>
-                <th colspan="5"><strong>Generation Length &darr;</strong></th>
-              </tr>
-              <tr>
-                <th>MATH 500</th>
-                <th>AIME 2024</th>
-                <th>GSM8K</th>
-                <th>GPQA Diamond</th>
-                <th style="border-right:2px solid #ccc">Avg.</th>
-                <th>MATH 500</th>
-                <th>AIME 2024</th>
-                <th>GSM8K</th>
-                <th>GPQA Diamond</th>
-                <th>Avg.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="11" style="text-align:center; font-weight:bold; background:#f5f5f5;">QwQ-32B&nbsp;<a href="https://arxiv.org/pdf/2412.06559" target="_blank" style="font-size:0.9em;">[1]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>97.66</td>
-                <td>76.88</td>
-                <td>96.67</td>
-                <td>64.17</td>
-                <td style="border-right:2px solid #ccc">83.84</td>
-                <td>4156</td>
-                <td>12080</td>
-                <td>1556</td>
-                <td>8095</td>
-                <td>6472</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>97.00</td>
-                <td>80.00</td>
-                <td>96.57</td>
-                <td>65.15</td>
-                <td style="border-right:2px solid #ccc">84.68</td>
-                <td>3827</td>
-                <td>11086</td>
-                <td>1536</td>
-                <td>7417</td>
-                <td>5967</td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td>98.00</td>
-                <td>83.33</td>
-                <td>96.81</td>
-                <td>67.17</td>
-                <td style="border-right:2px solid #ccc">86.32</td>
-                <td>3644</td>
-                <td>10627</td>
-                <td>1391</td>
-                <td>7213</td>
-                <td>5719</td>
-              </tr>
-              <tr>
-                <td colspan="11" style="text-align:center; font-weight:bold; background:#f5f5f5;">DeepSeek-R1-Distill-Qwen-32B&nbsp;<a href="https://arxiv.org/pdf/2501.12948" target="_blank" style="font-size:0.9em; color: #2a7f62">[2]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>94.50</td>
-                <td>72.08</td>
-                <td>95.61</td>
-                <td>63.10</td>
-                <td style="border-right:2px solid #ccc">81.32</td>
-                <td>3543</td>
-                <td>9347</td>
-                <td>875</td>
-                <td>6218</td>
-                <td>4995</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>93.00</td>
-                <td>63.33</td>
-                <td>95.30</td>
-                <td>59.09</td>
-                <td style="border-right:2px solid #ccc">77.68</td>
-                <td>3651</td>
-                <td>8050</td>
-                <td>1048</td>
-                <td>8395</td>
-                <td>5286</td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td>95.00</td>
-                <td>76.66</td>
-                <td>95.83</td>
-                <td>64.64</td>
-                <td style="border-right:2px solid #ccc">83.03</td>
-                <td>3373</td>
-                <td>6620</td>
-                <td>785</td>
-                <td>4722</td>
-                <td>3875</td>
-              </tr>
-              <tr>
-                <td colspan="11" style="text-align:center; font-weight:bold; background:#f5f5f5;">DeepSeek-R1-Distill-Llama-70B&nbsp;<a href="https://arxiv.org/pdf/2501.12948" target="_blank" style="font-size:0.9em; color: #e67e22">[3]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>94.70</td>
-                <td>70.40</td>
-                <td>94.82</td>
-                <td>65.34</td>
-                <td style="border-right:2px solid #ccc">81.31</td>
-                <td>3141</td>
-                <td>8684</td>
-                <td>620</td>
-                <td>5500</td>
-                <td>4486</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>94.61</td>
-                <td><b>73.33</b></td>
-                <td>93.60</td>
-                <td>66.16</td>
-                <td style="border-right:2px solid #ccc">81.92</td>
-                <td><b>2877</b></td>
-                <td>9457</td>
-                <td>606</td>
-                <td><b>4443</b></td>
-                <td>4345</td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td>94.80</td>
-                <td><b>73.33</b></td>
-                <td>94.90</td>
-                <td>66.66</td>
-                <td style="border-right:2px solid #ccc">82.42</td>
-                <td>3021</td>
-                <td><b>6644</b></td>
-                <td><b>597</b></td>
-                <td>4470</td>
-                <td>3683</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="figure-grid three-col">
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/tradeoff-gsm8k.png" alt="GSM8K trade-off curve">
+            <figcaption>GSM8K: LenVM-guided decoding traces a stronger frontier than hard truncation.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/tradeoff-math500.png" alt="MATH500 trade-off curve">
+            <figcaption>MATH500: shorter responses can preserve far more task performance.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/tradeoff-mathvista.png" alt="MathVista trade-off curve">
+            <figcaption>MathVista: the same value signal transfers to a VLM setting.</figcaption>
+          </figure>
         </div>
-        <p class="has-text-justified" style="margin-top:1em;">
-          <b>Table 1:</b> Comparison of <em>Soft Thinking</em> and various baseline methods on accuracy and generation length of correct answers across mathematical datasets. Best results are highlighted in <b>bold</b>.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full">
-        <div class="content">
-          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size: 0.95em;">
-            <thead>
-              <tr>
-                <th rowspan="2" style="vertical-align: middle;">Method</th>
-                <th colspan="4" style="text-align: center;">Accuracy &uarr;</th>
-                <th colspan="4" style="text-align: center;">Generation Length &darr;</th>
-              </tr>
-              <tr>
-                <th>HumanEval</th>
-                <th>MBPP</th>
-                <th>LiveCodeBench</th>
-                <th>Avg.</th>
-                <th>HumanEval</th>
-                <th>MBPP</th>
-                <th>LiveCodeBench</th>
-                <th>Avg.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="9" style="text-align:center; font-weight:bold; background:#f5f5f5;">QwQ-32B&nbsp;<a href="https://arxiv.org/pdf/2412.06559" target="_blank" style="font-size:0.9em;">[1]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>97.63</td>
-                <td>97.49</td>
-                <td>62.00</td>
-                <td>85.70</td>
-                <td>2557</td>
-                <td>2154</td>
-                <td>9986</td>
-                <td>4899</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>95.73</td>
-                <td>96.50</td>
-                <td>57.35</td>
-                <td>83.19</td>
-                <td><b>2396</b></td>
-                <td><b>2069</b></td>
-                <td><b>7034</b></td>
-                <td><b>3833</b></td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td><b>98.17</b></td>
-                <td><b>97.66</b></td>
-                <td><b>62.72</b></td>
-                <td><b>86.18</b></td>
-                <td>2638</td>
-                <td>2157</td>
-                <td>7535</td>
-                <td>4110</td>
-              </tr>
-              <tr>
-                <td colspan="9" style="text-align:center; font-weight:bold; background:#f5f5f5;">DeepSeek-R1-Distill-Qwen-32B&nbsp;<a href="https://arxiv.org/pdf/2501.12948" target="_blank" style="font-size:0.9em; color: #2a7f62">[2]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>97.25</td>
-                <td>95.13</td>
-                <td>57.33</td>
-                <td>83.23</td>
-                <td>3095</td>
-                <td>2761</td>
-                <td>8376</td>
-                <td>4744</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>87.19</td>
-                <td>87.54</td>
-                <td>43.36</td>
-                <td>72.70</td>
-                <td><b>2294</b></td>
-                <td><b>1703</b></td>
-                <td><b>4702</b></td>
-                <td><b>2900</b></td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td><b>97.56</b></td>
-                <td><b>95.33</b></td>
-                <td><b>59.50</b></td>
-                <td><b>84.13</b></td>
-                <td>2713</td>
-                <td>2534</td>
-                <td>6255</td>
-                <td>3834</td>
-              </tr>
-              <tr>
-                <td colspan="9" style="text-align:center; font-weight:bold; background:#f5f5f5;">DeepSeek-R1-Distill-Llama-70B&nbsp;<a href="https://arxiv.org/pdf/2501.12948" target="_blank" style="font-size:0.9em; color: #e67e22">[3]</a></td>
-              </tr>
-              <tr>
-                <td>CoT Thinking</td>
-                <td>97.71</td>
-                <td>94.77</td>
-                <td>56.94</td>
-                <td>83.14</td>
-                <td>2711</td>
-                <td>2386</td>
-                <td>8319</td>
-                <td>4472</td>
-              </tr>
-              <tr>
-                <td>CoT Thinking (Greedy)</td>
-                <td>92.07</td>
-                <td>91.82</td>
-                <td>48.02</td>
-                <td>77.30</td>
-                <td>2192</td>
-                <td>1979</td>
-                <td>5438</td>
-                <td>3203</td>
-              </tr>
-              <tr style="font-weight:bold;">
-                <td>Soft Thinking</td>
-                <td><b>98.17</b></td>
-                <td><b>94.94</b></td>
-                <td><b>58.42</b></td>
-                <td><b>83.84</b></td>
-                <td>2498</td>
-                <td>2214</td>
-                <td>6512</td>
-                <td>3741</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="has-text-justified" style="margin-top:1em;">
-            <b>Table 2:</b> Comparison of <em>Soft Thinking</em> and various baseline methods on accuracy and generation length of correct answers across three coding datasets. Best results are highlighted in <b>bold</b>.
-          </p>
+        <div class="card table-card narrow-card">
+          <div class="table-header">
+            <div>
+              <p class="eyebrow">Prompt-Boundary Prediction</p>
+              <h3>Mean Relative Error on length estimation</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model Size</th>
+                  <th>Math (Lower Better)</th>
+                  <th>Code (Lower Better)</th>
+                  <th>IF (Lower Better)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1.5B</td><td>17.0%</td><td>29.0%</td><td>33.0%</td></tr>
+                <tr><td>3B</td><td>13.6%</td><td>24.0%</td><td>27.2%</td></tr>
+                <tr><td>7B</td><td>11.0%</td><td>19.5%</td><td>23.0%</td></tr>
+                <tr><td>14B</td><td>10.4%</td><td>17.0%</td><td>19.8%</td></tr>
+                <tr><td>32B</td><td>9.8%</td><td>14.9%</td><td>17.1%</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      </section>
 
+      <section id="analysis" class="section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Analysis</p>
+          <h2>LenVM is useful not only for control, but also for reading generation dynamics.</h2>
+        </div>
 
+        <div class="grid two-col">
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/wordcloud-positive.png" alt="Positive length tokens word cloud">
+            <figcaption>Positive length tokens tend to mark longer-horizon shifts such as "wait", "think", "try", and "consider".</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/wordcloud-negative.png" alt="Negative length tokens word cloud">
+            <figcaption>Negative length tokens often align with closure and answer finalization.</figcaption>
+          </figure>
+        </div>
 
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Scalability</p>
+          <h2>Value pretraining quality improves predictably as scale increases.</h2>
+        </div>
+        <div class="figure-grid three-col">
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/scale-model.png" alt="Scaling by model size">
+            <figcaption>Validation loss drops with larger models.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/scale-questions.png" alt="Scaling by number of training questions">
+            <figcaption>More training questions improve the value objective.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/scale-samples.png" alt="Scaling by number of samples per question">
+            <figcaption>More sampled completions per prompt provide more useful supervision.</figcaption>
+          </figure>
+        </div>
 
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Ablations</p>
+          <h2>Design choices matter, but the framing remains stable.</h2>
+        </div>
+        <div class="figure-grid three-col">
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/ablation-length-space.png" alt="Ablation on length-space representation">
+            <figcaption>Length-space representation is the strongest target formulation.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/ablation-shuffle.png" alt="Ablation on shuffle batching">
+            <figcaption>Shuffling beats grouped batching.</figcaption>
+          </figure>
+          <figure class="card figure-card">
+            <img src="./static/assets/figures/ablation-precision.png" alt="Ablation on numerical precision">
+            <figcaption>Numerical precision has visible impact on prediction quality.</figcaption>
+          </figure>
+        </div>
+      </section>
 
+      <section id="paper" class="section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Paper</p>
+          <h2>Citation and full PDF in one place.</h2>
+        </div>
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{zhang2025softthinkingunlockingreasoning,
-    title={Soft Thinking: Unlocking the Reasoning Potential of LLMs in Continuous Concept Space}, 
-    author={Zhen Zhang and Xuehai He and Weixiang Yan and Ao Shen and Chenyang Zhao and Shuohang Wang and Yelong Shen and Xin Eric Wang},
-    year={2025},
-    eprint={2505.15778},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2505.15778}, 
+        <div class="grid paper-grid">
+          <article class="card prose-card">
+            <h3>BibTeX</h3>
+            <pre><code>@article{zhang2026lengthvaluemodel,
+  title   = {Length Value Model: Scalable Value Pretraining for Token-Level Length Modeling},
+  author  = {Zhen Zhang and Changyi Yang and Zijie Xia and Zhen Yang and Chengzhi Liu and Zhaotiao Weng and Yepeng Liu and Haobo Chen and Jin Pan and Chenyang Zhao and Yuheng Bu and Alkesh Patel and Zhe Gan and Xin Eric Wang},
+  year    = {2026},
+  journal = {arXiv preprint arXiv}
 }</code></pre>
-  </div>
-</section>
-
-
-
-
-<footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is adapted from <a rel="license"
-            href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> and <a rel="license"
-            href="https://gligen.github.io/">GLIGEN</a>, licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
+            <div class="inline-actions">
+              <a class="button" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">PDF</span><span>Download PDF</span></a>
+            </div>
+          </article>
         </div>
-      </div>
-    </div>
+
+        <div class="card pdf-card">
+          <iframe src="./static/assets/pdfs/paper.pdf#view=FitH" title="Length Value Model paper PDF"></iframe>
+        </div>
+      </section>
+    </main>
   </div>
-
-</footer>
-
-
-
-
-
-<script>
-  let data = [];
-  let currentIndex = 0;
-  const videoUrlPrefix = "https://videounderstanding.s3.us-east-2.amazonaws.com/";
-
-  function loadCSV() {
-    $.ajax({
-      type: "GET",
-      url: "./static/webdemo_data.csv",
-      dataType: "text",
-      success: function(response) {
-        data = $.csv.toObjects(response);
-        updateContent();
-      }
-    });
-  }
-
-  function updateContent() {
-    if (data.length > 0 && currentIndex >= 0 && currentIndex < data.length) {
-      const currentData = data[currentIndex];
-      const videoUrl = videoUrlPrefix + currentData.video_url;
-      $('#video-source').attr('src', videoUrl);
-      $('#example-video')[0].load();
-      $('#question').text(currentData.question);
-      $('#discipline').text(currentData.domain);
-      $('#subdiscipline').text(currentData.subdomain);
-      const options = [currentData.option_a, currentData.option_b, currentData.option_c, currentData.option_d];
-      $('#options').empty();
-      options.forEach(option => {
-        $('#options').append(`<option value="${option}">${option}</option>`);
-      });
-    }
-  }
-
-  $('#next-button').on('click', function() {
-    if (currentIndex < data.length - 1) {
-      currentIndex++;
-      updateContent();
-    }
-  });
-
-  $('#prev-button').on('click', function() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateContent();
-    }
-  });
-
-  $(document).ready(function() {
-    loadCSV();
-    
-    const observer = new MutationObserver(() => {
-      const alertElement = document.querySelector('crowd-form').shadowRoot.querySelector('crowd-alert').shadowRoot.querySelector('awsui-alert');
-      if (alertElement) {
-        alertElement.style.display = 'none';
-      }
-    });
-    
-    observer.observe(document.querySelector('crowd-form').shadowRoot, { childList: true, subtree: true });
-  });
-</script>
-
-
-<!-- Additional libraries for parsing CSV -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"></script>
-
 </body>
 </html>
