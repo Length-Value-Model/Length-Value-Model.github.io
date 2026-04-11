@@ -41,20 +41,18 @@
         <div class="hero-head reveal">
           <p class="eyebrow">UCSB + Apple collaborative research</p>
           <h1>Length Value Model</h1>
-          <p class="hero-kicker">LenVM</p>
+          <p class="hero-kicker">Scalable value pretraining for token-level length modeling.</p>
         </div>
 
         <div class="hero-body-grid">
         <div class="hero-copy reveal">
-          <p class="hero-subtitle">
-            Scalable value pretraining for token-level length modeling.
-          </p>
           <p class="hero-summary">
             Length Value Model, or LenVM, treats remaining generation length as a value estimation problem. It predicts a bounded token-level signal during decoding, enabling precise length control, smooth performance-efficiency trade-offs, prompt-boundary length prediction, and interpretable generation dynamics.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">PDF</span><span>Read Paper</span></a>
+            <a class="button button-primary" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">arXiv</span><span>Read Paper</span></a>
             <a class="button" href="https://github.com/eric-ai-lab/Length-Value-Model"><span class="button-icon">&lt;/&gt;</span><span>Code</span></a>
+            <a class="button" href="./demo/index.html"><span class="button-icon">Live</span><span>Demo</span></a>
             <a class="button" href="#paper"><span class="button-icon">{ }</span><span>BibTeX</span></a>
           </div>
           <div class="meta-strip">
@@ -68,7 +66,7 @@
           <div class="hero-figure card">
             <img src="./static/assets/figures/lenvm.png" alt="LenVM architecture and training pipeline">
             <div class="figure-intro">
-              <p class="figure-label">Architecture</p>
+              <p class="figure-label">Architecture & Training Pipeline</p>
               <p>
                 At each decoding step, LenVM attaches a scalar head to the final hidden state and predicts a value in \( (-1, 0) \), giving a token-level estimate of the remaining generation horizon.
               </p>
@@ -84,57 +82,34 @@
           <h2>Research team and affiliations</h2>
         </div>
         <div class="authors-card card">
-          <div class="authors-list">
-            <span class="author-pill"><strong>Zhen Zhang</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Changyi Yang</strong><em>Carnegie Mellon + LMSYS</em></span>
-            <span class="author-pill"><strong>Zijie Xia</strong><em>LMSYS</em></span>
-            <span class="author-pill"><strong>Zhen Yang</strong><em>Apple</em></span>
-            <span class="author-pill"><strong>Chengzhi Liu</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Zhaotiao Weng</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Yepeng Liu</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Haobo Chen</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Jin Pan</strong><em>Wisconsin + LMSYS</em></span>
-            <span class="author-pill"><strong>Chenyang Zhao</strong><em>LMSYS</em></span>
-            <span class="author-pill"><strong>Yuheng Bu</strong><em>UC Santa Barbara</em></span>
-            <span class="author-pill"><strong>Alkesh Patel</strong><em>Apple</em></span>
-            <span class="author-pill"><strong>Zhe Gan</strong><em>Apple</em></span>
-            <span class="author-pill"><strong>Xin Eric Wang</strong><em>UC Santa Barbara</em></span>
+          <div class="authors-line">
+            <a class="author-name" href="#"><span>Zhen Zhang</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Changyi Yang</span><sup>2,4</sup></a>
+            <a class="author-name" href="#"><span>Zijie Xia</span><sup>4</sup></a>
+            <a class="author-name" href="#"><span>Zhen Yang</span><sup>5</sup></a>
+            <a class="author-name" href="#"><span>Chengzhi Liu</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Zhaotiao Weng</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Yepeng Liu</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Haobo Chen</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Jin Pan</span><sup>3,4</sup></a>
+            <a class="author-name" href="#"><span>Chenyang Zhao</span><sup>4</sup></a>
+            <a class="author-name" href="#"><span>Yuheng Bu</span><sup>1</sup></a>
+            <a class="author-name" href="#"><span>Alkesh Patel</span><sup>5</sup></a>
+            <a class="author-name" href="#"><span>Zhe Gan</span><sup>5</sup></a>
+            <a class="author-name" href="#"><span>Xin Eric Wang</span><sup>1</sup></a>
           </div>
-          <div class="affiliation-strip">
-            <span>UC Santa Barbara</span>
-            <span>Carnegie Mellon University</span>
-            <span>University of Wisconsin-Madison</span>
-            <span>LMSYS Org</span>
-            <span>Apple</span>
+          <div class="affiliation-list">
+            <span><sup>1</sup> University of California, Santa Barbara</span>
+            <span><sup>2</sup> Carnegie Mellon University</span>
+            <span><sup>3</sup> University of Wisconsin-Madison</span>
+            <span><sup>4</sup> LMSYS Org</span>
+            <span><sup>5</sup> Apple</span>
           </div>
-        </div>
-      </section>
-
-      <section class="section reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Core Idea</p>
-          <h2>Length is not just an output statistic. It is a token-level computational state.</h2>
-        </div>
-        <div class="grid three-col">
-          <article class="card feature-card">
-            <h3>Model Remaining Horizon</h3>
-            <p>
-              Instead of reasoning about whole-sequence length only after decoding, LenVM predicts the remaining generation horizon at every token.
-            </p>
-          </article>
-          <article class="card feature-card">
-            <h3>Formulate It as Value</h3>
-            <p>
-              By assigning a constant per-token cost, remaining length becomes a bounded discounted return:
-              \( G_t = -(1 - \gamma^{L-t}) \).
-            </p>
-          </article>
-          <article class="card feature-card">
-            <h3>Use It at Inference</h3>
-            <p>
-              The resulting signal can steer decoding toward shorter or longer continuations, predict response budgets early, and expose interpretable horizon shifts.
-            </p>
-          </article>
+          <div class="correspondence-line">
+            Correspondence:
+            <a href="mailto:zhen_zhang@ucsb.edu">zhen_zhang@ucsb.edu</a>,
+            <a href="mailto:ericxwang@ucsb.edu">ericxwang@ucsb.edu</a>
+          </div>
         </div>
       </section>
 
@@ -145,23 +120,89 @@
         </div>
         <div class="method-layout">
           <div class="card method-card">
-            <h3>How LenVM works</h3>
-            <ul class="detail-list">
-              <li>Attach a scalar value head to the final-layer hidden state at each decoding step.</li>
-              <li>Train against exact Monte Carlo targets computed from sampled completions.</li>
-              <li>Keep the target bounded in \( (-1, 0) \) for stable regression over very long horizons.</li>
-              <li>Scale supervision through more prompts, more completions per prompt, and larger backbone models.</li>
-            </ul>
+            <h3>Modeling length as a discounted return</h3>
+            <p>
+              LenVM starts from a constant negative reward at each non-terminal decoding step:
+            </p>
+            <div class="formula-block">
+              \[
+              r_t = -(1-\gamma), \qquad t = 0, \dots, L-1
+              \]
+            </div>
+            <p>
+              For a sampled completion of generated length \(L\), the discounted return from step \(t\) is:
+            </p>
+            <div class="formula-block">
+              \[
+              G_t \triangleq \sum_{i=0}^{L-t} \gamma^i r_{t+i}
+              = -(1-\gamma^{L-t})
+              \]
+            </div>
+            <p>
+              This makes remaining generation length a bounded and monotone proxy of the remaining horizon, instead of regressing directly on raw token count.
+            </p>
           </div>
           <div class="card method-card">
-            <h3>What the signal enables</h3>
-            <ul class="detail-list">
-              <li>Hard constraints such as equal-to, at-most, and at-least generation length.</li>
-              <li>Continuous trade-off control through value-guided exponential tilting.</li>
-              <li>Prompt-boundary estimates for scheduling, batching, and memory planning.</li>
-              <li>Token-level interpretation of when reasoning shifts toward longer or shorter continuations.</li>
-            </ul>
+            <h3>Value head and objective</h3>
+            <p>
+              A scalar value head is attached to the final-layer hidden state at each decoding step:
+            </p>
+            <div class="formula-block">
+              \[
+              z_t = W_2 \, \mathrm{SiLU}(W_1 h_t + b_1) + b_2
+              \]
+            </div>
+            <div class="formula-block">
+              \[
+              V_\theta(s_t) = -\sigma(z_t)
+              \]
+            </div>
+            <p>
+              Training uses token-averaged mean squared error over sampled prompt-completion trajectories:
+            </p>
+            <div class="formula-block">
+              \[
+              \mathcal{L}_{\mathrm{len}}
+              =
+              \frac{
+              \sum_{n=1}^{N}\sum_{t=0}^{L^{(n)}-1}
+              \left(V_\theta(s_t^{(n)}) - G_t^{(n)}\right)^2
+              }{
+              \sum_{n=1}^{N} L^{(n)}
+              }
+              \]
+            </div>
+            <p>
+              Supervision is dense because every non-terminal token contributes a target.
+            </p>
           </div>
+        </div>
+
+        <div class="grid method-advantages">
+          <article class="card feature-card">
+            <h3>Annotation-free</h3>
+            <p>
+              Targets are computed directly from observed completion lengths, without any extra human labels or reward models.
+            </p>
+          </article>
+          <article class="card feature-card">
+            <h3>Dense</h3>
+            <p>
+              Every token position contributes supervision, rather than producing only one target for an entire response.
+            </p>
+          </article>
+          <article class="card feature-card">
+            <h3>Exact</h3>
+            <p>
+              Rewards and returns are deterministically computed from the realized trajectory, avoiding additional annotation noise.
+            </p>
+          </article>
+          <article class="card feature-card">
+            <h3>Scalable</h3>
+            <p>
+              Supervision grows naturally with more prompts and more sampled completions per prompt, and scales with larger models.
+            </p>
+          </article>
         </div>
       </section>
 
@@ -241,10 +282,10 @@
               <thead>
                 <tr>
                   <th>Model</th>
-                  <th>Equal To Deviation (Lower Better)</th>
-                  <th>Equal To Score (Higher Better)</th>
-                  <th>At Most Score (Higher Better)</th>
-                  <th>At Least Score (Higher Better)</th>
+                  <th>Equal To Deviation ↓</th>
+                  <th>Equal To Score ↑</th>
+                  <th>At Most Score ↑</th>
+                  <th>At Least Score ↑</th>
                 </tr>
               </thead>
               <tbody>
@@ -301,9 +342,9 @@
               <thead>
                 <tr>
                   <th>Model Size</th>
-                  <th>Math (Lower Better)</th>
-                  <th>Code (Lower Better)</th>
-                  <th>IF (Lower Better)</th>
+                  <th>Math ↓</th>
+                  <th>Code ↓</th>
+                  <th>IF ↓</th>
                 </tr>
               </thead>
               <tbody>
@@ -327,7 +368,7 @@
         <div class="grid two-col">
           <figure class="card figure-card">
             <img src="./static/assets/figures/wordcloud-positive.png" alt="Positive length tokens word cloud">
-            <figcaption>Positive length tokens tend to mark longer-horizon shifts such as "wait", "think", "try", and "consider".</figcaption>
+            <figcaption>Positive length tokens tend to mark longer-horizon shifts such as "wait", "think", "try", "Ah", and "consider".</figcaption>
           </figure>
           <figure class="card figure-card">
             <img src="./static/assets/figures/wordcloud-negative.png" alt="Negative length tokens word cloud">
@@ -335,9 +376,21 @@
           </figure>
         </div>
 
+        <div class="analysis-copy card prose-card">
+          <p>
+            Beyond prediction and control, LenVM also offers a qualitative view of where generation shifts toward longer or shorter continuations. We analyze tokens that repeatedly co-occur with upward or downward changes in LenVM's predicted remaining horizon, and refer to them as <em>length tokens</em>. Using the one-step TD-style score \( s_t = r_{t-1} + \gamma V_t - V_{t-1} \), positive values indicate a shift toward a longer expected continuation, while negative values indicate a shift toward a shorter one.
+          </p>
+          <p>
+            Positive length tokens often resemble local reasoning pivots such as "ah", "but", "now", "wait", "let", "think", "try", and "consider". By contrast, negative length tokens are more often associated with closure, confirmation, or answer finalization. This analysis is descriptive rather than causal, but it shows that LenVM provides a simple token-level lens on generation dynamics.
+          </p>
+        </div>
+
         <div class="section-heading compact-heading">
           <p class="eyebrow">Scalability</p>
           <h2>Value pretraining quality improves predictably as scale increases.</h2>
+          <p>
+            One of the main claims of the paper is that length supervision is naturally scalable. Validation loss improves not only with larger backbone models, but also with more training questions and more sampled completions per question, showing that the objective benefits from both data breadth and trajectory density.
+          </p>
         </div>
         <div class="figure-grid three-col">
           <figure class="card figure-card">
@@ -390,13 +443,13 @@
   journal = {arXiv preprint arXiv}
 }</code></pre>
             <div class="inline-actions">
-              <a class="button" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">PDF</span><span>Download PDF</span></a>
+              <a class="button" href="https://arxiv.org/pdf/2505.15778"><span class="button-icon">PDF</span><span>Download PDF</span></a>
             </div>
           </article>
         </div>
 
         <div class="card pdf-card">
-          <iframe src="./static/assets/pdfs/paper.pdf#view=FitH" title="Length Value Model paper PDF"></iframe>
+          <iframe src="https://arxiv.org/pdf/2505.15778" title="Length Value Model paper PDF"></iframe>
         </div>
       </section>
     </main>

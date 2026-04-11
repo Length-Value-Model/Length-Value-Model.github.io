@@ -27,9 +27,9 @@ body {
   font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(212, 227, 255, 0.8), transparent 28%),
-    radial-gradient(circle at top right, rgba(255, 232, 214, 0.8), transparent 30%),
-    linear-gradient(180deg, #fbfbfd 0%, #f3f4f7 45%, #eef1f5 100%);
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 24%),
+    radial-gradient(circle at top right, rgba(245, 245, 247, 0.92), transparent 28%),
+    linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 42%, #eef0f3 100%);
 }
 
 .analytics-hidden,
@@ -309,53 +309,75 @@ table {
   padding: 28px;
 }
 
-.authors-list {
+.authors-line {
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 2.1;
+  font-size: 1.02rem;
+}
+
+.author-name {
+  display: inline-block;
+  color: #1b2029;
+  line-height: inherit;
+  margin-right: 0.18rem;
+}
+
+.author-name:hover {
+  color: var(--accent);
+}
+
+.author-name:not(:last-child)::after {
+  content: ",";
+  color: #1b2029;
+}
+
+.author-name sup,
+.affiliation-list sup,
+.correspondence-line sup {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.72em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.affiliation-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   justify-content: center;
-}
-
-.author-pill {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 180px;
-  padding: 16px 18px;
-  border: 1px solid rgba(15, 23, 42, 0.07);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.74);
-  text-align: left;
-}
-
-.author-pill strong {
-  font-size: 0.98rem;
-  font-weight: 600;
-}
-
-.author-pill em {
-  color: var(--muted);
-  font-style: normal;
-  font-size: 0.9rem;
-}
-
-.affiliation-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 18px;
+  gap: 8px 18px;
+  margin-top: 20px;
   padding-top: 18px;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
+  text-align: center;
 }
 
-.affiliation-strip span {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(10, 132, 255, 0.08);
-  color: #22415f;
-  font-size: 0.9rem;
-  font-weight: 600;
+.affiliation-list span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.affiliation-list sup {
+  font-size: 0.72em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.correspondence-line {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+.correspondence-line a {
+  color: var(--accent);
 }
 
 .section-heading {
@@ -365,7 +387,7 @@ table {
 }
 
 .section-heading h2 {
-  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  font-size: clamp(2.0rem, 5vw, 2.8rem);
 }
 
 .section-heading p {
@@ -391,9 +413,17 @@ table {
 }
 
 .two-col,
-.paper-grid,
 .method-layout {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.paper-grid {
+  grid-template-columns: 1fr;
+}
+
+.method-advantages {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 22px;
 }
 
 .feature-card,
@@ -421,6 +451,18 @@ table {
   margin: 0;
   line-height: 1.75;
   font-size: 1rem;
+}
+
+.formula-block {
+  margin: 18px 0 20px;
+  padding: 18px 20px;
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.formula-block .MathJax {
+  font-size: 1.02rem !important;
 }
 
 .detail-list {
@@ -513,12 +555,14 @@ tbody tr:last-child td {
 }
 
 .figure-card {
-  overflow: hidden;
+  overflow: visible;
+  padding: 18px;
 }
 
 .figure-card img {
   border-radius: 18px;
   background: #fff;
+  object-fit: contain;
 }
 
 .figure-card figcaption {
@@ -535,10 +579,18 @@ tbody tr:last-child td {
   color: #eef2f7;
   font-size: 0.9rem;
   line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .inline-actions {
   margin-top: 16px;
+}
+
+.analysis-copy {
+  max-width: 1080px;
+  margin: 22px auto 0;
 }
 
 .pdf-card iframe {
@@ -570,6 +622,10 @@ tbody tr:last-child td {
   .paper-grid,
   .method-layout {
     grid-template-columns: 1fr;
+  }
+
+  .method-advantages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero-body-grid {
@@ -609,6 +665,21 @@ tbody tr:last-child td {
   .table-card,
   .pdf-card {
     padding: 20px;
+  }
+
+  .figure-card {
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-figure {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .method-advantages {
+    grid-template-columns: 1fr;
   }
 
   th,
