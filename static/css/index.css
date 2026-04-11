@@ -248,6 +248,12 @@ table {
   color: #fff;
 }
 
+.button-demo {
+  border-color: rgba(186, 134, 0, 0.22);
+  background: linear-gradient(135deg, #ffb000 0%, #ffd166 100%);
+  color: #1f1f1f;
+}
+
 .card {
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
