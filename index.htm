@@ -4,31 +4,83 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Length Value Model: Scalable Value Pretraining for Token-Level Length Modeling. A UCSB and Apple collaborative project on token-level length control, prediction, and interpretation.">
-  <meta name="keywords" content="Length Value Model, LenVM, token-level length modeling, value pretraining, LLM, VLM">
-  <meta property="og:title" content="Length Value Model">
-  <meta property="og:description" content="Scalable value pretraining for token-level length modeling.">
+  <meta name="keywords" content="Length Value Model, LenVM, token-level length modeling, value pretraining, LLM, VLM, machine learning, AI research">
+  <meta name="author" content="UCSB and Apple Research Team">
+  <meta name="theme-color" content="#0a84ff">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Length Value Model - Scalable Value Pretraining">
+  <meta property="og:description" content="Scalable value pretraining for token-level length modeling. Precise length control, smooth performance-efficiency trade-offs, and interpretable generation dynamics.">
   <meta property="og:url" content="https://length-value-model.github.io/">
+  <meta property="og:image" content="https://length-value-model.github.io/static/assets/figures/lenvm.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Length Value Model">
+  <meta name="twitter:description" content="Scalable value pretraining for token-level length modeling.">
+  <meta name="twitter:image" content="https://length-value-model.github.io/static/assets/figures/lenvm.png">
+
   <link rel="canonical" href="https://length-value-model.github.io/">
-  <title>Length Value Model</title>
+  <title>Length Value Model - Scalable Value Pretraining for Token-Level Length Modeling</title>
+
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <!-- Preload critical CSS -->
+  <link rel="preload" href="./static/css/index.css" as="style">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <!-- MathJax configuration -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
         displayMath: [['\\[', '\\]']]
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            console.log('MathJax loaded');
+          });
+        }
       }
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-  <link rel="stylesheet" href="./static/css/index.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "name": "Length Value Model: Scalable Value Pretraining for Token-Level Length Modeling",
+    "author": [
+      {"@type": "Person", "name": "Zhen Zhang"},
+      {"@type": "Person", "name": "Changyi Yang"},
+      {"@type": "Person", "name": "Zijie Xia"}
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "UCSB and Apple"
+    },
+    "description": "Scalable value pretraining for token-level length modeling.",
+    "url": "https://length-value-model.github.io/"
+  }
+  </script>
+
+  <!-- Main JavaScript -->
+  <script defer src="./static/js/main.js"></script>
 </head>
 <body>
   <div class="analytics-hidden" aria-hidden="true">
     <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=aWXOLmFIGQWsyqDz9oyKoEBQIJsF7KoJWVoQwqpHvrY&cl=ffffff&w=a"></script>
   </div>
   <div class="page-shell">
-    <header class="topbar">
-      <a class="brand" href="#top">Length Value Model</a>
-      <nav class="topnav">
+    <header class="topbar" role="banner">
+      <a class="brand" href="#top" aria-label="Length Value Model Home">Length Value Model</a>
+      <nav class="topnav" role="navigation" aria-label="Main navigation">
         <a href="./demo/index.html">Demo</a>
         <a href="#method">Method</a>
         <a href="#results">Results</a>
@@ -37,11 +89,11 @@
       </nav>
     </header>
 
-    <main id="top">
-      <section class="hero">
+    <main id="top" role="main">
+      <section class="hero" aria-labelledby="hero-title">
         <div class="hero-head reveal">
           <p class="eyebrow">UCSB + Apple collaborative research</p>
-          <h1>Length Value Model</h1>
+          <h1 id="hero-title">Length Value Model</h1>
           <p class="hero-kicker">Scalable value pretraining for token-level length modeling.</p>
         </div>
 
@@ -51,60 +103,114 @@
             Length Value Model, or LenVM, treats remaining generation length as a value estimation problem. It predicts a bounded token-level signal during decoding, enabling precise length control, smooth performance-efficiency trade-offs, prompt-boundary length prediction, and interpretable generation dynamics.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="./static/assets/pdfs/paper.pdf"><span class="button-icon">arXiv</span><span>Read Paper</span></a>
-            <a class="button" href="https://github.com/eric-ai-lab/Length-Value-Model"><span class="button-icon">&lt;/&gt;</span><span>Code</span></a>
-            <a class="button button-demo" href="./demo/index.html"><span class="button-icon">Live</span><span>Demo</span></a>
-            <a class="button" href="#paper"><span class="button-icon">{ }</span><span>BibTeX</span></a>
+            <a class="button button-primary" href="./static/assets/pdfs/paper.pdf" aria-label="Read the research paper">
+              <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Paper</span>
+            </a>
+            <a class="button button-code" href="https://github.com/eric-ai-lab/Length-Value-Model" aria-label="View source code on GitHub">
+              <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              <span>Code</span>
+            </a>
+            <a class="button button-demo" href="./demo/index.html" aria-label="Try the live demo">
+              <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+              </svg>
+              <span>Demo</span>
+            </a>
+            <a class="button button-bibtex" href="#paper" aria-label="View BibTeX citation">
+              <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span>Cite</span>
+            </a>
           </div>
-          <div class="meta-strip">
-            <span>Annotation-free supervision</span>
-            <span>Dense token-level targets</span>
-            <span>LLMs and VLMs</span>
+          <div class="meta-strip" role="list">
+            <span class="tag tag-blue" role="listitem">
+              <svg class="tag-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              Annotation-free
+            </span>
+            <span class="tag tag-green" role="listitem">
+              <svg class="tag-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="9" x2="15" y2="9"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+              Dense
+            </span>
+            <span class="tag tag-purple" role="listitem">
+              <svg class="tag-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              Unbiased
+            </span>
+            <span class="tag tag-orange" role="listitem">
+              <svg class="tag-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              Scalable
+            </span>
           </div>
         </div>
 
         <div class="hero-visual reveal">
-          <div class="hero-figure card">
-            <img src="./static/assets/figures/lenvm.png" alt="LenVM architecture and training pipeline">
-            <div class="figure-intro">
+          <figure class="hero-figure card">
+            <img src="./static/assets/figures/lenvm.png" alt="LenVM architecture diagram showing the training pipeline with scalar head predicting values in the range of negative one to zero" loading="eager" width="800" height="600">
+            <figcaption class="figure-intro">
               <p class="figure-label">Architecture & Training Pipeline</p>
               <p>
                 At each decoding step, LenVM attaches a scalar head to the final hidden state and predicts a value in \( (-1, 0) \), giving a token-level estimate of the remaining generation horizon.
               </p>
-            </div>
-          </div>
+            </figcaption>
+          </figure>
         </div>
         </div>
       </section>
 
-      <section class="authors section section-tight reveal">
+      <section class="authors section section-tight reveal" aria-labelledby="authors-heading">
         <div class="section-heading compact-heading">
           <p class="eyebrow">Authors</p>
-          <h2>Research team and affiliations</h2>
+          <h2 id="authors-heading">Research team and affiliations</h2>
         </div>
         <div class="authors-card card">
-          <div class="authors-line">
-            <a class="author-name" href="#"><span>Zhen Zhang</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Changyi Yang</span><sup>2,4</sup></a>
-            <a class="author-name" href="#"><span>Zijie Xia</span><sup>4</sup></a>
-            <a class="author-name" href="#"><span>Zhen Yang</span><sup>5</sup></a>
-            <a class="author-name" href="#"><span>Chengzhi Liu</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Zhaotiao Weng</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Yepeng Liu</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Haobo Chen</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Jin Pan</span><sup>3,4</sup></a>
-            <a class="author-name" href="#"><span>Chenyang Zhao</span><sup>4</sup></a>
-            <a class="author-name" href="#"><span>Yuheng Bu</span><sup>1</sup></a>
-            <a class="author-name" href="#"><span>Alkesh Patel</span><sup>5</sup></a>
-            <a class="author-name" href="#"><span>Zhe Gan</span><sup>5</sup></a>
-            <a class="author-name" href="#"><span>Xin Eric Wang</span><sup>1</sup></a>
+          <div class="authors-line" role="list">
+            <span class="author-name" role="listitem"><span>Zhen Zhang</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Changyi Yang</span><sup>2,4</sup></span>
+            <span class="author-name" role="listitem"><span>Zijie Xia</span><sup>4</sup></span>
+            <span class="author-name" role="listitem"><span>Zhen Yang</span><sup>5</sup></span>
+            <span class="author-name" role="listitem"><span>Chengzhi Liu</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Zhaotiao Weng</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Yepeng Liu</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Haobo Chen</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Jin Pan</span><sup>3,4</sup></span>
+            <span class="author-name" role="listitem"><span>Chenyang Zhao</span><sup>4</sup></span>
+            <span class="author-name" role="listitem"><span>Yuheng Bu</span><sup>1</sup></span>
+            <span class="author-name" role="listitem"><span>Alkesh Patel</span><sup>5</sup></span>
+            <span class="author-name" role="listitem"><span>Zhe Gan</span><sup>5</sup></span>
+            <span class="author-name" role="listitem"><span>Xin Eric Wang</span><sup>1</sup></span>
           </div>
-          <div class="affiliation-list">
-            <span><sup>1</sup> University of California, Santa Barbara</span>
-            <span><sup>2</sup> Carnegie Mellon University</span>
-            <span><sup>3</sup> University of Wisconsin-Madison</span>
-            <span><sup>4</sup> LMSYS Org</span>
-            <span><sup>5</sup> Apple</span>
+          <div class="affiliation-list" role="list">
+            <span role="listitem"><sup>1</sup> University of California, Santa Barbara</span>
+            <span role="listitem"><sup>2</sup> Carnegie Mellon University</span>
+            <span role="listitem"><sup>3</sup> University of Wisconsin-Madison</span>
+            <span role="listitem"><sup>4</sup> LMSYS Org</span>
+            <span role="listitem"><sup>5</sup> Apple</span>
           </div>
           <div class="correspondence-line">
             Correspondence:
@@ -318,15 +424,15 @@
 
         <div class="figure-grid three-col">
           <figure class="card figure-card">
-            <img src="./static/assets/figures/tradeoff-gsm8k.png" alt="GSM8K trade-off curve">
+            <img src="./static/assets/figures/tradeoff-gsm8k.png" alt="GSM8K performance-efficiency trade-off curve comparing LenVM-guided decoding versus hard truncation" loading="lazy" width="600" height="400">
             <figcaption>GSM8K: LenVM-guided decoding traces a stronger frontier than hard truncation.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/tradeoff-math500.png" alt="MATH500 trade-off curve">
+            <img src="./static/assets/figures/tradeoff-math500.png" alt="MATH500 trade-off curve showing shorter responses preserving task performance" loading="lazy" width="600" height="400">
             <figcaption>MATH500: shorter responses can preserve far more task performance.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/tradeoff-mathvista.png" alt="MathVista trade-off curve">
+            <img src="./static/assets/figures/tradeoff-mathvista.png" alt="MathVista trade-off curve demonstrating value signal transfer to VLM setting" loading="lazy" width="600" height="400">
             <figcaption>MathVista: the same value signal transfers to a VLM setting.</figcaption>
           </figure>
         </div>
@@ -368,11 +474,11 @@
 
         <div class="grid two-col">
           <figure class="card figure-card">
-            <img src="./static/assets/figures/wordcloud-positive.png" alt="Positive length tokens word cloud">
+            <img src="./static/assets/figures/wordcloud-positive.png" alt="Word cloud visualization of positive length tokens including wait, think, try, and consider" loading="lazy" width="600" height="400">
             <figcaption>Positive length tokens tend to mark longer-horizon shifts such as "wait", "think", "try", "Ah", and "consider".</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/wordcloud-negative.png" alt="Negative length tokens word cloud">
+            <img src="./static/assets/figures/wordcloud-negative.png" alt="Word cloud visualization of negative length tokens associated with closure and finalization" loading="lazy" width="600" height="400">
             <figcaption>Negative length tokens often align with closure and answer finalization.</figcaption>
           </figure>
         </div>
@@ -395,15 +501,15 @@
         </div>
         <div class="figure-grid three-col">
           <figure class="card figure-card">
-            <img src="./static/assets/figures/scale-model.png" alt="Scaling by model size">
+            <img src="./static/assets/figures/scale-model.png" alt="Graph showing validation loss decreasing as model size increases" loading="lazy" width="600" height="400">
             <figcaption>Validation loss drops with larger models.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/scale-questions.png" alt="Scaling by number of training questions">
+            <img src="./static/assets/figures/scale-questions.png" alt="Graph demonstrating improvement in value objective with more training questions" loading="lazy" width="600" height="400">
             <figcaption>More training questions improve the value objective.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/scale-samples.png" alt="Scaling by number of samples per question">
+            <img src="./static/assets/figures/scale-samples.png" alt="Graph showing better supervision quality with more sampled completions per prompt" loading="lazy" width="600" height="400">
             <figcaption>More sampled completions per prompt provide more useful supervision.</figcaption>
           </figure>
         </div>
@@ -414,24 +520,24 @@
         </div>
         <div class="figure-grid three-col">
           <figure class="card figure-card">
-            <img src="./static/assets/figures/ablation-length-space.png" alt="Ablation on length-space representation">
+            <img src="./static/assets/figures/ablation-length-space.png" alt="Ablation study comparing length-space representation against alternative formulations" loading="lazy" width="600" height="400">
             <figcaption>Length-space representation is the strongest target formulation.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/ablation-shuffle.png" alt="Ablation on shuffle batching">
+            <img src="./static/assets/figures/ablation-shuffle.png" alt="Ablation study showing shuffle batching outperforming grouped batching" loading="lazy" width="600" height="400">
             <figcaption>Shuffling beats grouped batching.</figcaption>
           </figure>
           <figure class="card figure-card">
-            <img src="./static/assets/figures/ablation-precision.png" alt="Ablation on numerical precision">
+            <img src="./static/assets/figures/ablation-precision.png" alt="Ablation study demonstrating impact of numerical precision on prediction quality" loading="lazy" width="600" height="400">
             <figcaption>Numerical precision has visible impact on prediction quality.</figcaption>
           </figure>
         </div>
       </section>
 
-      <section id="paper" class="section reveal">
+      <section id="paper" class="section reveal" aria-labelledby="paper-heading">
         <div class="section-heading">
           <p class="eyebrow">Paper</p>
-          <h2>Citation and full PDF in one place.</h2>
+          <h2 id="paper-heading">Citation and full PDF in one place.</h2>
         </div>
 
         <div class="grid paper-grid">
@@ -444,13 +550,20 @@
   journal = {arXiv preprint arXiv}
 }</code></pre>
             <div class="inline-actions">
-              <a class="button" href="https://arxiv.org/pdf/2505.15778"><span class="button-icon">PDF</span><span>Download PDF</span></a>
+              <a class="button button-neutral" href="https://arxiv.org/pdf/2505.15778" aria-label="Download the full paper PDF">
+                <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download PDF</span>
+              </a>
             </div>
           </article>
         </div>
 
         <div class="card pdf-card">
-          <iframe src="https://arxiv.org/pdf/2505.15778" title="Length Value Model paper PDF"></iframe>
+          <iframe src="https://arxiv.org/pdf/2505.15778" title="Length Value Model research paper PDF viewer" loading="lazy"></iframe>
         </div>
       </section>
     </main>
